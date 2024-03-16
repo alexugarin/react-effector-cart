@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import * as React from "react";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
+import "./App.css";
+import ProductCard from "./ProductCard";
+import ProductsList from "./mockData";
 
-function App() {
+export default function App() {
+  const propsMock = ProductsList;
+  const ListProductCard = propsMock.map((product)=><ProductCard key={product.id} {...product}/>)
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container maxWidth="md">
+      <Typography component="h1" variant="h3">
+        {" "}
+        Корзина
+      </Typography>
+      <Grid container spacing={2} columns={4}>
+        <Grid xs={3} xl={3}>
+          {ListProductCard}
+        </Grid>
+        <Grid xs={1} xl={1}>
+          <Typography component="h2" variant="h5">
+            {" "}
+            Итого
+          </Typography>
+        </Grid>
+      </Grid>
+    </Container>
   );
 }
-
-export default App;
