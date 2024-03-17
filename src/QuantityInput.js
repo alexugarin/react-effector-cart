@@ -3,8 +3,22 @@ import { Unstable_NumberInput as BaseNumberInput } from '@mui/base/Unstable_Numb
 import { styled } from '@mui/system';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
+import { useUnit } from 'effector-react';
+import { $todos, getById, setValue as setStoreValue } from './newStore';
+import { unstable_useNumberInput as useNumberInput } from '@mui/base/unstable_useNumberInput';
+import { unstable_useForkRef as useForkRef } from '@mui/utils';
 
 const NumberInput = React.forwardRef(function CustomNumberInput(props, ref) {
+  const {
+    getRootProps,
+    getInputProps,
+    getIncrementButtonProps,
+    getDecrementButtonProps,
+  } = useNumberInput(props);
+
+  const inputProps = getInputProps();
+
+  inputProps.ref = useForkRef(inputProps.ref, ref);
   return (
     <BaseNumberInput
       slots={{
@@ -18,20 +32,29 @@ const NumberInput = React.forwardRef(function CustomNumberInput(props, ref) {
         incrementButton: {
           children: <AddIcon fontSize="small" />,
           className: 'increment',
+          
         },
         decrementButton: {
           children: <RemoveIcon fontSize="small" />,
         },
       }}
       {...props}
-      ref={ref}
+      
     />
   );
 });
 
 export default function QuantityInput(props) {
   //console.log(props)
-  return <NumberInput aria-label="Quantity Input"  defaultValue={1} min={1} max={10} />;
+  
+  const [value, setValue] = React.useState(props.value)
+  React.useEffect(() => {
+    // Update the document title using the browser API
+    console.log(`You clicked on product id:${props.productId} and set value:${value}`) ;
+    //setStoreValue([props.productId, value])
+  });
+  console.log(props.productId)
+  return <NumberInput aria-label="Quantity Input" onChange={(event, val)=>{setValue(val)}} value={value ?? 1} min={1} max={10} />;
 }
 
 const blue = {
